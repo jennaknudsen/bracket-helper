@@ -16,7 +16,7 @@ let last_values = {
     p1_score: 0,
     p2_name: "",
     p2_score: 0,
-    p2_losers: true,
+    p2_losers: false,
 }
 
 const router = express.Router();
@@ -25,10 +25,6 @@ const router = express.Router();
 const jsonParser = bodyParser.json()
 
 router.put('/', jsonParser, (req, res) => {
-    console.log('Got a POST request');
-    console.log(req.body);
-
-    // public API: allow calls from any IP
     res.set('Access-Control-Allow-Origin', '*');
     res.set('Access-Control-Allow-Methods', 'POST');
     res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
@@ -46,20 +42,25 @@ router.put('/', jsonParser, (req, res) => {
 
     if (thisRound !== last_values.round) {
         fs.writeFileSync(folderName + round_filename, thisRound, {flag: 'w'}, err => console.error(err));
+        console.log('Round: ' + thisRound);
     }
-    if (thisP1Name !== last_values.p1_name || thisP1Losers !== last_values.p1_score) {
+    if (thisP1Name !== last_values.p1_name || thisP1Losers !== last_values.p1_losers) {
         const name = thisP1Name + (thisP1Losers ? " (L)" : "");
         fs.writeFileSync(folderName + p1_filename, name, {flag: 'w'}, err => console.error(err));
+        console.log('Player 1: ' + name);
     }
     if (thisP1Score !== last_values.p1_score) {
         fs.writeFileSync(folderName + p1_score_filename, thisP1Score, {flag: 'w'}, err => console.error(err));
+        console.log('Player 1 Score: ' + thisP1Score);
     }
-    if (thisP2Name !== last_values.p2_name || thisP2Losers !== last_values.p2_score) {
-        const name = thisP1Name + (thisP2Losers ? " (L)" : "");
+    if (thisP2Name !== last_values.p2_name || thisP2Losers !== last_values.p2_losers) {
+        const name = thisP2Name + (thisP2Losers ? " (L)" : "");
         fs.writeFileSync(folderName + p2_filename, name, {flag: 'w'}, err => console.error(err));
+        console.log('Player 2: ' + name);
     }
-    if (thisP1Score !== last_values.p2_score) {
-        fs.writeFileSync(folderName + p2_score_filename, thisP1Score, {flag: 'w'}, err => console.error(err));
+    if (thisP2Score !== last_values.p2_score) {
+        fs.writeFileSync(folderName + p2_score_filename, thisP2Score, {flag: 'w'}, err => console.error(err));
+        console.log('Player 2 Score: ' + thisP2Score);
     }
 
     // update the last values

@@ -70,3 +70,22 @@ function incrementP2() {
     p2_score.value = parseInt(p2_score.value) + 1;
     textChanged();
 }
+
+function resetWins() {
+    document.getElementById('player-1-score').value = '0';
+    document.getElementById('player-2-score').value = '0';
+    document.getElementById('player-1-losers').checked = false;
+    document.getElementById('player-2-losers').checked = false;
+    textChanged();
+}
+
+function resetAll() {
+    document.getElementById('round-name').value = '';
+    document.getElementById('player-1').value = '';
+    document.getElementById('player-2').value = '';
+    document.getElementById('player-1-score').value = '0';
+    document.getElementById('player-2-score').value = '0';
+    document.getElementById('player-1-losers').checked = false;
+    document.getElementById('player-2-losers').checked = false;
+    textChanged();
+}
