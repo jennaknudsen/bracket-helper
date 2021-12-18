@@ -27,8 +27,10 @@ function textChanged() {
                 p2_losers: p2_losers
             };
 
-            fetch('/api', {
-                method: 'POST',
+            console.log(post_object)
+
+            fetch('http://localhost:3000/api', {
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
