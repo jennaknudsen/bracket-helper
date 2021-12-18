@@ -17,24 +17,33 @@
     </div>
     <div>
         <label class="input-label" for="player-1">Player 1: </label>
-        <input type="text" id="player-1"/>
+        <input type="text" id="player-1" oninput="textChanged()"/>
+
         <span class="space-span"></span>
+
         <input type="button" id="minus-p1" value="-" onclick="decrementP1()">
         <input type="text" id="player-1-score" style="width: 20px;" value="0" disabled/>
         <input type="button" id="plus-p1" value="+" onclick="incrementP1()">
+
         <span class="space-span"></span>
+
         <label for="player-1-losers">[L]</label>
         <input type="checkbox" id="player-1-losers" />
     </div>
     <div>
         <label class="input-label" for="player-2">Player 2: </label>
         <input type="text" id="player-2"/>
-    </div>
-    <div>
-    </div>
-    <div>
-        <label class="input-label" for="round-name">Round: </label>
-        <input type="text" id="round-name"/>
+
+        <span class="space-span"></span>
+
+        <input type="button" id="minus-p2" value="-" onclick="decrementP2()">
+        <input type="text" id="player-2-score" style="width: 20px;" value="0" disabled/>
+        <input type="button" id="plus-p2" value="+" onclick="incrementP2()">
+
+        <span class="space-span"></span>
+
+        <label for="player-2-losers">[L]</label>
+        <input type="checkbox" id="player-2-losers" />
     </div>
 </body>
 </html>
