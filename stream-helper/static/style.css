@@ -1,7 +1,8 @@
 .input-label {
     text-align: right;
-    width: 150px;
+    width: 100px;
     display: inline-block;
+    margin-right: 5px;
 }
 
 div {

@@ -50,7 +50,7 @@ router.put('/', jsonParser, (req, res) => {
     }
     if (thisP1Name !== last_values.p1_name || thisP1Losers !== last_values.p1_losers) {
         console.log('Start updating p1 name');
-        const name = thisP1Name + (thisP1Losers ? " (L)" : "");
+        const name = thisP1Name + (thisP1Losers ? " [L]" : "");
         fs.writeFileSync(folderName + p1_filename, name, {flag: 'w'}, err => console.error(err));
         console.log('Player 1: ' + name);
         console.log('Done updating');
@@ -63,7 +63,7 @@ router.put('/', jsonParser, (req, res) => {
     }
     if (thisP2Name !== last_values.p2_name || thisP2Losers !== last_values.p2_losers) {
         console.log('Start updating p2 name');
-        const name = thisP2Name + (thisP2Losers ? " (L)" : "");
+        const name = thisP2Name + (thisP2Losers ? " [L]" : "");
         fs.writeFileSync(folderName + p2_filename, name, {flag: 'w'}, err => console.error(err));
         console.log('Player 2: ' + name);
         console.log('Done updating');
