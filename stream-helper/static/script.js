@@ -7,7 +7,7 @@ function textChanged() {
 
     setTimeout(() => {
         if (currentTime === lastChangeTime) {
-            console.log("Event fired");
+            console.log("Request sent to server");
 
             const round = document.getElementById('round-name').value;
             const p1_name = document.getElementById('player-1').value;
@@ -35,7 +35,11 @@ function textChanged() {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(post_object)
-            }).then(() => console.log('All values updated'));
+            }).then(data => data.json()).then((data) => {
+                console.log('All values updated on server')
+                document.getElementById('results-pre').innerHTML = 
+                    JSON.stringify(data, null, '    ');
+            });
         }
     }, timeToUpdate);
 }

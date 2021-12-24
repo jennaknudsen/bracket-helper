@@ -29,6 +29,8 @@ router.put('/', jsonParser, (req, res) => {
     res.set('Access-Control-Allow-Methods', 'POST');
     res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
+    console.log('Got a PUT request')
+
     const thisRound = req.body.round;
     const thisP1Name = req.body.p1_name;
     const thisP1Losers = req.body.p1_losers;
@@ -41,26 +43,36 @@ router.put('/', jsonParser, (req, res) => {
     const folderName = __dirname + '/' + text_dir_name;
 
     if (thisRound !== last_values.round) {
+        console.log('Start updating round');
         fs.writeFileSync(folderName + round_filename, thisRound, {flag: 'w'}, err => console.error(err));
         console.log('Round: ' + thisRound);
+        console.log('Done updating');
     }
     if (thisP1Name !== last_values.p1_name || thisP1Losers !== last_values.p1_losers) {
+        console.log('Start updating p1 name');
         const name = thisP1Name + (thisP1Losers ? " (L)" : "");
         fs.writeFileSync(folderName + p1_filename, name, {flag: 'w'}, err => console.error(err));
         console.log('Player 1: ' + name);
+        console.log('Done updating');
     }
     if (thisP1Score !== last_values.p1_score) {
+        console.log('Start updating p1 score');
         fs.writeFileSync(folderName + p1_score_filename, thisP1Score, {flag: 'w'}, err => console.error(err));
         console.log('Player 1 Score: ' + thisP1Score);
+        console.log('Done updating');
     }
     if (thisP2Name !== last_values.p2_name || thisP2Losers !== last_values.p2_losers) {
+        console.log('Start updating p2 name');
         const name = thisP2Name + (thisP2Losers ? " (L)" : "");
         fs.writeFileSync(folderName + p2_filename, name, {flag: 'w'}, err => console.error(err));
         console.log('Player 2: ' + name);
+        console.log('Done updating');
     }
     if (thisP2Score !== last_values.p2_score) {
+        console.log('Start updating p2 score');
         fs.writeFileSync(folderName + p2_score_filename, thisP2Score, {flag: 'w'}, err => console.error(err));
         console.log('Player 2 Score: ' + thisP2Score);
+        console.log('Done updating');
     }
 
     // update the last values
@@ -74,6 +86,8 @@ router.put('/', jsonParser, (req, res) => {
         p2_losers: thisP2Losers,
     }
 
+    console.log('Done with request.\n')
+    res.send(last_values);
 });
 
 module.exports = router;
