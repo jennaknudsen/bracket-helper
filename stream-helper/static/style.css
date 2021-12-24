@@ -8,6 +8,28 @@ div {
     padding: 5px;
 }
 
+body {
+    background-color: #cfcfcf;
+    font-family: 'Helvetica', sans-serif;
+}
+
+.centered-div {
+    padding-left: 30px;
+    padding-right: 30px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 80%;
+    box-shadow: 0px 0px 10px 10px #888888;
+    background-color: #fbfbfb;
+}
+
 .space-span {
     padding-left: 40px;
+}
+
+pre {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
 }
