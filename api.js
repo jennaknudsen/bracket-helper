@@ -9,6 +9,12 @@ const p1_score_filename = 'p1_score.txt';
 const p2_filename = 'p2_name.txt';
 const p2_score_filename = 'p2_score.txt';
 
+// create our folder for text files if it doesn't exist
+const textFileFolderName = __dirname + '/' + text_dir_name;
+if (!fs.existsSync(textFileFolderName)){
+    fs.mkdirSync(textFileFolderName);
+}
+
 let last_values = {
     round: "",
     p1_name: "",
@@ -24,6 +30,7 @@ const router = express.Router();
 // create application/json parser
 const jsonParser = bodyParser.json()
 
+// handles all PUT requests to the server
 router.put('/', jsonParser, (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
     res.set('Access-Control-Allow-Methods', 'POST');
@@ -39,38 +46,35 @@ router.put('/', jsonParser, (req, res) => {
     const thisP2Losers = req.body.p2_losers;
     const thisP2Score = req.body.p2_score;
 
-    // if any different values, write them
-    const folderName = __dirname + '/' + text_dir_name;
-
     if (thisRound !== last_values.round) {
         console.log('Start updating round');
-        fs.writeFileSync(folderName + round_filename, thisRound, {flag: 'w'}, err => console.error(err));
+        fs.writeFileSync(textFileFolderName + round_filename, thisRound, {flag: 'w'}, err => console.error(err));
         console.log('Round: ' + thisRound);
         console.log('Done updating');
     }
     if (thisP1Name !== last_values.p1_name || thisP1Losers !== last_values.p1_losers) {
         console.log('Start updating p1 name');
         const name = thisP1Name.toUpperCase() + (thisP1Losers ? " [L]" : "");
-        fs.writeFileSync(folderName + p1_filename, name, {flag: 'w'}, err => console.error(err));
+        fs.writeFileSync(textFileFolderName + p1_filename, name, {flag: 'w'}, err => console.error(err));
         console.log('Player 1: ' + name);
         console.log('Done updating');
     }
     if (thisP1Score !== last_values.p1_score) {
         console.log('Start updating p1 score');
-        fs.writeFileSync(folderName + p1_score_filename, thisP1Score, {flag: 'w'}, err => console.error(err));
+        fs.writeFileSync(textFileFolderName + p1_score_filename, thisP1Score, {flag: 'w'}, err => console.error(err));
         console.log('Player 1 Score: ' + thisP1Score);
         console.log('Done updating');
     }
     if (thisP2Name !== last_values.p2_name || thisP2Losers !== last_values.p2_losers) {
         console.log('Start updating p2 name');
         const name = thisP2Name.toUpperCase() + (thisP2Losers ? " [L]" : "");
-        fs.writeFileSync(folderName + p2_filename, name, {flag: 'w'}, err => console.error(err));
+        fs.writeFileSync(textFileFolderName + p2_filename, name, {flag: 'w'}, err => console.error(err));
         console.log('Player 2: ' + name);
         console.log('Done updating');
     }
     if (thisP2Score !== last_values.p2_score) {
         console.log('Start updating p2 score');
-        fs.writeFileSync(folderName + p2_score_filename, thisP2Score, {flag: 'w'}, err => console.error(err));
+        fs.writeFileSync(textFileFolderName + p2_score_filename, thisP2Score, {flag: 'w'}, err => console.error(err));
         console.log('Player 2 Score: ' + thisP2Score);
         console.log('Done updating');
     }
