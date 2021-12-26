@@ -1,0 +1,20 @@
+body {
+    padding: 0px;
+    margin: 0px;
+}
+
+h1 {
+    font-family: 'DIN Alternate', sans-serif;
+    font-size: 42px;
+    font-weight: bold;
+    color: white;
+    outline-width: 2px;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    /* https://www.codesdope.com/blog/article/adding-outline-to-text-using-css/ */
+    text-shadow: -2px 2px 0 #000,
+    2px 2px 0 #000,
+    2px -2px 0 #000,
+    -2px -2px 0 #000;
+}
