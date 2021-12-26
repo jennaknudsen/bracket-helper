@@ -1,5 +1,15 @@
+body{
+    padding: 0px;
+    margin: 0px;
+}
+
 h1 {
-    font-family: 'Avenir Next Condensed Bold', sans-serif;
-    font-size: 48px;
+    font-family: 'Avenir Next Condensed', sans-serif;
+    font-size: 52px;
     font-weight: bold;
+    text-transform: uppercase;
+    color: white;
+    text-align: center;
+    margin: 0;
+    padding: 0;
 }

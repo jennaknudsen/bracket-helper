@@ -9,7 +9,12 @@
 <h1 id='p1-name'>Please wait...</h1>
 <script>
 // generate a random UUID for the client
-let uuid = self.crypto.randomUUID();;
+let uuid;
+if (typeof self.crypto.randomUUID === 'function') {
+    uuid = self.crypto.randomUUID();
+} else {
+    uuid = Math.floor(Math.random(1) * 1_000_000_000_000_000).toString();
+}
 
 // update websocket url in prod
 const wsclient = new WebSocket('ws://localhost:3000?id=' + uuid);
@@ -19,6 +24,7 @@ wsclient.onopen = () => {
     wsclient.send(JSON.stringify({ get: true }));
 }
 
+// on message received, set correct HTML element with correct text
 wsclient.onmessage = message => {
     const messageData = JSON.parse(message.data);
     document.getElementById('p1-name').innerHTML = messageData.p1_name;
