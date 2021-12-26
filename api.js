@@ -1,6 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser')
 const fs = require('fs');
+const ws = require('ws');
+const wsServer = require('./websocket').wsServer;
 
 const text_dir_name = 'text_files/';
 const round_filename = 'round_name.txt';
@@ -8,6 +10,9 @@ const p1_filename = 'p1_name.txt';
 const p1_score_filename = 'p1_score.txt';
 const p2_filename = 'p2_name.txt';
 const p2_score_filename = 'p2_score.txt';
+
+// fix this hardcoded string in final release
+const webSocket = new ws.WebSocket('ws://localhost:3000')
 
 // create our folder for text files if it doesn't exist
 const textFileFolderName = __dirname + '/' + text_dir_name;
@@ -90,7 +95,15 @@ router.put('/', jsonParser, (req, res) => {
         p2_losers: thisP2Losers,
     }
 
-    console.log('Done with request.\n')
+    console.log('Done with request.\n');
+
+    // send message to each client (except itself)
+    wsServer.clients.forEach(client => {
+        if (client !== ws && client.readyState === ws.OPEN) {
+            client.send(JSON.stringify(last_values));
+        }
+    });
+
     res.send(last_values);
 });
 

@@ -12,6 +12,7 @@ app.use('/api', api);
 // use the static directory to serve static html files
 app.use(express.static('static'));
 
+// start the express server
 const server = app.listen(port, () => {
     console.log(`App listening on port ${port}`);
 });

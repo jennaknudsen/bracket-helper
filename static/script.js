@@ -7,7 +7,7 @@ function textChanged() {
 
     setTimeout(() => {
         if (currentTime === lastChangeTime) {
-            console.log("Request sent to server");
+            console.log("Request sent to server. Payload:");
 
             const round = document.getElementById('round-name').value;
             const p1_name = document.getElementById('player-1').value;
@@ -92,4 +92,11 @@ function resetAll() {
     document.getElementById('player-1-losers').checked = false;
     document.getElementById('player-2-losers').checked = false;
     textChanged();
+}
+
+// test code for websockets
+const wsclient = new WebSocket('ws://localhost:3000');
+wsclient.onmessage = message => {
+    console.log('Got message from server via WebSocket');
+    console.log(JSON.parse(message.data));
 }
