@@ -1,5 +1,10 @@
 // generate a random UUID for the client
-let uuid = self.crypto.randomUUID();
+let uuid;
+if (typeof self.crypto.randomUUID === 'function') {
+    uuid = self.crypto.randomUUID();
+} else {
+    uuid = Math.floor(Math.random(1) * 1_000_000_000_000_000).toString();
+}
 document.getElementById('client-id').innerHTML = uuid;
 
 const serverIP = '13.59.226.222:80';
