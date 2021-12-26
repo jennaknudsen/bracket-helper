@@ -2,11 +2,11 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>P2 Title</title>
-    <link href="player.css" rel="stylesheet">
+    <title>P1 Score</title>
+    <link href="score.css" rel="stylesheet">
 </head>
 <body>
-<h1 id='p2-name'>Please wait...</h1>
+<h1 id='p1-score'>Please wait...</h1>
 <script>
 // generate a random UUID for the client
 let uuid;
@@ -27,7 +27,7 @@ wsclient.onopen = () => {
 // on message received, set correct HTML element with correct text
 wsclient.onmessage = message => {
     const messageData = JSON.parse(message.data);
-    document.getElementById('p2-name').innerHTML = messageData.p2_name + (messageData.p2_losers ? " [L]" : "");
+    document.getElementById('p1-score').innerHTML = messageData.p1_score;
 }
 </script>
 </body>
