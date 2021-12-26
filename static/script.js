@@ -31,18 +31,6 @@ function textChanged() {
 
             console.log(post_object)
 
-            // fetch('http://localhost:3000/api', {
-            //     method: 'PUT',
-            //     headers: {
-            //         'Content-Type': 'application/json'
-            //     },
-            //     body: JSON.stringify(post_object)
-            // }).then(data => data.json()).then((data) => {
-            //     console.log('All values updated on server')
-            //     document.getElementById('results-pre').innerHTML = 
-            //         JSON.stringify(data, null, '    ');
-            // });
-
             // send message to server using websockets
             wsclient.send(JSON.stringify(post_object));
         }
