@@ -7,7 +7,7 @@ if (typeof self.crypto.randomUUID === 'function') {
 }
 document.getElementById('client-id').innerHTML = uuid;
 
-const serverIP = '13.59.226.222:80';
+const serverIP = 'jennaknudsen.info';
 const wsclient = new WebSocket('ws://' + serverIP + '?id=' + uuid);
 
 let lastChangeTime = 0;
