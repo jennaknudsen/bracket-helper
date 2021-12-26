@@ -1,5 +1,7 @@
 // generate a random UUID for the client
 let uuid = self.crypto.randomUUID();
+document.getElementById('client-id').innerHTML = uuid;
+
 // update websocket url in prod
 const wsclient = new WebSocket('ws://localhost:3000?id=' + uuid);
 let lastChangeTime = 0;
@@ -107,4 +109,6 @@ wsclient.onmessage = message => {
         document.getElementById('player-1-losers').checked = messageData.p1_losers;
         document.getElementById('player-2-losers').checked = messageData.p2_losers;
     }
+
+    document.getElementById('results-pre').innerHTML = JSON.stringify(messageData, null, '    ');
 }
