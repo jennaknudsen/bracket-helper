@@ -13,10 +13,6 @@ const p2_score_filename = 'p2_score.txt';
 // make the websocket server
 const wsServer = new ws.Server({ noServer: true });
 
-// fix this hardcoded string in final release
-const webSocket = new ws.WebSocket('ws://localhost:3000?id=SERVER');
-webSocket.id = 'SERVER';
-
 // create our folder for text files if it doesn't exist
 const textFileFolderName = __dirname + '/' + text_dir_name;
 if (!fs.existsSync(textFileFolderName)) {
@@ -112,17 +108,11 @@ wsServer.on('connection', (socket, req) => {
             // send message to each client (except itself)
             wsServer.clients.forEach(client => {
                 verboseDebug('Client: ' + client.id)
-                if (client.id !== webSocket.id && client.readyState === ws.OPEN) {
+                if (client.readyState === ws.OPEN) {
                     verboseDebug('Message sent.');
                     client.send(JSON.stringify(last_values));
                 } else {
-                    let reasonNotSent = "";
-                    if (client.id === webSocket.id)
-                        reasonNotSent = 'Is server';
-                    else
-                        reasonNotSent = 'Client is not open';
-
-                    verboseDebug('Message not sent: ' + reasonNotSent);
+                    verboseDebug('Message not sent: Client is not open.');
                 }
             });
         }
