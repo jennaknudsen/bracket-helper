@@ -17,7 +17,7 @@ if (typeof self.crypto.randomUUID === 'function') {
 }
 
 const serverIP = 'jennaknudsen.info';
-const wsclient = new WebSocket('ws://' + serverIP + '?id=' + uuid);
+const wsclient = new WebSocket('wss://' + serverIP + '?id=' + uuid);
 
 // get all information on page load
 wsclient.onopen = () => {
