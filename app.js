@@ -1,7 +1,6 @@
 const express = require('express');
 const api = require('./api');
-const startWebSockets = require('./websocket');
-// const websocket = require('./websocket');
+const websocket = require('./websocket');
 
 // make an express app
 const app = express();
@@ -17,8 +16,9 @@ const server = app.listen(port, () => {
     console.log(`App listening on port ${port}`);
 });
 
-// export server to use in websocket implementation
-module.exports.server = server;
-
-// add websockets support
-startWebSockets();
+// adds WebSocket support to Express server
+server.on('upgrade', (request, socket, head) => {
+    websocket.wsServer.handleUpgrade(request, socket, head, socket => {
+        websocket.wsServer.emit('connection', socket, request);
+    });
+});
