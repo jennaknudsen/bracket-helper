@@ -10,12 +10,15 @@ const p1_score_filename = 'p1_score.txt';
 const p2_filename = 'p2_name.txt';
 const p2_score_filename = 'p2_score.txt';
 
+// only save to text files if SAVE_TO_FILES environment variable is present
+const saveToFiles = process.env.SAVE_TO_FILES ? process.env.SAVE_TO_FILES.toLowerCase() === 'true' : false;
+
 // make the websocket server
 const wsServer = new ws.Server({ noServer: true });
 
 // create our folder for text files if it doesn't exist
 const textFileFolderName = __dirname + '/' + text_dir_name;
-if (!fs.existsSync(textFileFolderName)) {
+if (saveToFiles && !fs.existsSync(textFileFolderName)) {
     fs.mkdirSync(textFileFolderName);
 }
 
@@ -60,37 +63,39 @@ wsServer.on('connection', (socket, req) => {
             const thisP2Losers = messageJson.p2_losers;
             const thisP2Score = messageJson.p2_score;
         
-            if (thisRound !== last_values.round) {
-                verboseDebug('Start updating round');
-                fs.writeFileSync(textFileFolderName + round_filename, thisRound, {flag: 'w'}, err => console.error(err));
-                verboseDebug('Round: ' + thisRound);
-                verboseDebug('Done updating');
-            }
-            if (thisP1Name !== last_values.p1_name || thisP1Losers !== last_values.p1_losers) {
-                verboseDebug('Start updating p1 name');
-                const name = thisP1Name.toUpperCase() + (thisP1Losers ? " [L]" : "");
-                fs.writeFileSync(textFileFolderName + p1_filename, name, {flag: 'w'}, err => console.error(err));
-                verboseDebug('Player 1: ' + name);
-                verboseDebug('Done updating');
-            }
-            if (thisP1Score !== last_values.p1_score) {
-                verboseDebug('Start updating p1 score');
-                fs.writeFileSync(textFileFolderName + p1_score_filename, thisP1Score, {flag: 'w'}, err => console.error(err));
-                verboseDebug('Player 1 Score: ' + thisP1Score);
-                verboseDebug('Done updating');
-            }
-            if (thisP2Name !== last_values.p2_name || thisP2Losers !== last_values.p2_losers) {
-                verboseDebug('Start updating p2 name');
-                const name = thisP2Name.toUpperCase() + (thisP2Losers ? " [L]" : "");
-                fs.writeFileSync(textFileFolderName + p2_filename, name, {flag: 'w'}, err => console.error(err));
-                verboseDebug('Player 2: ' + name);
-                verboseDebug('Done updating');
-            }
-            if (thisP2Score !== last_values.p2_score) {
-                verboseDebug('Start updating p2 score');
-                fs.writeFileSync(textFileFolderName + p2_score_filename, thisP2Score, {flag: 'w'}, err => console.error(err));
-                verboseDebug('Player 2 Score: ' + thisP2Score);
-                verboseDebug('Done updating');
+            if (saveToFiles) {
+                if (thisRound !== last_values.round) {
+                    verboseDebug('Start updating round');
+                    fs.writeFileSync(textFileFolderName + round_filename, thisRound, {flag: 'w'}, err => console.error(err));
+                    verboseDebug('Round: ' + thisRound);
+                    verboseDebug('Done updating');
+                }
+                if (thisP1Name !== last_values.p1_name || thisP1Losers !== last_values.p1_losers) {
+                    verboseDebug('Start updating p1 name');
+                    const name = thisP1Name.toUpperCase() + (thisP1Losers ? " [L]" : "");
+                    fs.writeFileSync(textFileFolderName + p1_filename, name, {flag: 'w'}, err => console.error(err));
+                    verboseDebug('Player 1: ' + name);
+                    verboseDebug('Done updating');
+                }
+                if (thisP1Score !== last_values.p1_score) {
+                    verboseDebug('Start updating p1 score');
+                    fs.writeFileSync(textFileFolderName + p1_score_filename, thisP1Score, {flag: 'w'}, err => console.error(err));
+                    verboseDebug('Player 1 Score: ' + thisP1Score);
+                    verboseDebug('Done updating');
+                }
+                if (thisP2Name !== last_values.p2_name || thisP2Losers !== last_values.p2_losers) {
+                    verboseDebug('Start updating p2 name');
+                    const name = thisP2Name.toUpperCase() + (thisP2Losers ? " [L]" : "");
+                    fs.writeFileSync(textFileFolderName + p2_filename, name, {flag: 'w'}, err => console.error(err));
+                    verboseDebug('Player 2: ' + name);
+                    verboseDebug('Done updating');
+                }
+                if (thisP2Score !== last_values.p2_score) {
+                    verboseDebug('Start updating p2 score');
+                    fs.writeFileSync(textFileFolderName + p2_score_filename, thisP2Score, {flag: 'w'}, err => console.error(err));
+                    verboseDebug('Player 2 Score: ' + thisP2Score);
+                    verboseDebug('Done updating');
+                }
             }
         
             // update the last values
