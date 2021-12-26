@@ -90,5 +90,15 @@ function resetAll() {
 // this handles return messages from the server
 wsclient.onmessage = message => {
     console.log('Got message from server via WebSocket');
-    console.log(JSON.parse(message.data));
+    const messageData = JSON.parse(message.data);
+    console.log(messageData);
+
+    // use message data to set fields properly
+    document.getElementById('round-name').value = messageData.round;
+    document.getElementById('player-1').value = messageData.p1_name;
+    document.getElementById('player-2').value = messageData.p2_name;
+    document.getElementById('player-1-score').value = messageData.p1_score;
+    document.getElementById('player-2-score').value = messageData.p2_score;
+    document.getElementById('player-1-losers').checked = messageData.p1_losers;
+    document.getElementById('player-2-losers').checked = messageData.p2_losers;
 }
