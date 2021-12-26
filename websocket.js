@@ -2,6 +2,7 @@ const ws = require('ws');
 const express = require('express');
 const fs = require('fs');
 const verboseDebug = require('./verbose-debug');
+const url = require('url');
 
 const text_dir_name = 'text_files/';
 const round_filename = 'round_name.txt';
@@ -14,7 +15,7 @@ const p2_score_filename = 'p2_score.txt';
 const wsServer = new ws.Server({ noServer: true });
 
 // fix this hardcoded string in final release
-const webSocket = new ws.WebSocket('ws://localhost:3000')
+const webSocket = new ws.WebSocket('ws://localhost:3000?id=SERVER')
 
 // create our folder for text files if it doesn't exist
 const textFileFolderName = __dirname + '/' + text_dir_name;
@@ -33,10 +34,14 @@ let last_values = {
     p2_losers: false,
 }
 
-wsServer.on('connection', socket => {
+wsServer.on('connection', (socket, req) => {
+    // assigns a unique ID to this socket based on query 
+    socket.id = url.parse(req.url, true).query.id;
+
     // this event is fired when a message is received
     socket.on('message', message => {
         console.log('Got message: ' + message.toString())
+        console.log('Message from: ' + socket.id)
 
         messageJson = JSON.parse(message);
 
@@ -91,15 +96,24 @@ wsServer.on('connection', socket => {
             p2_score: thisP2Score,
             p2_losers: thisP2Losers,
         }
-    
-        console.log('Done with request.\n');
+
+        // deep copy / clone
+        let send_object = JSON.parse(JSON.stringify(last_values));
+        send_object.senderID = socket.id;
     
         // send message to each client (except itself)
         wsServer.clients.forEach(client => {
-            if (client !== ws && client.readyState === ws.OPEN) {
-                client.send(JSON.stringify(last_values));
+            verboseDebug('Client: ' + client.id)
+            if (client.id !== 'SERVER' && client.readyState === ws.OPEN) {
+                verboseDebug('Message sent.');
+                client.send(JSON.stringify(send_object));
+            } else {
+                verboseDebug('Message not sent: ' + 
+                    (client.id === 'SERVER' ? 'Is server' : 'client.readyState !== ws.OPEN'));
             }
         });
+    
+        console.log('Done with request.\n');
     })
 })
 

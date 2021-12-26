@@ -1,5 +1,7 @@
+// generate a random UUID for the client
+let uuid = self.crypto.randomUUID();
 // update websocket url in prod
-const wsclient = new WebSocket('ws://localhost:3000');
+const wsclient = new WebSocket('ws://localhost:3000?id=' + uuid);
 let lastChangeTime = 0;
 const timeToUpdate = 2000;
 
