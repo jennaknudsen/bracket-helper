@@ -112,3 +112,8 @@ wsclient.onmessage = message => {
 
     document.getElementById('results-pre').innerHTML = JSON.stringify(messageData, null, '    ');
 }
+
+// get all information on page load
+wsclient.onopen = () => {
+    wsclient.send(JSON.stringify({ get: true }));
+}

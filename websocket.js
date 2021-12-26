@@ -1,5 +1,4 @@
 const ws = require('ws');
-const express = require('express');
 const fs = require('fs');
 const verboseDebug = require('./verbose-debug');
 const url = require('url');
@@ -15,11 +14,12 @@ const p2_score_filename = 'p2_score.txt';
 const wsServer = new ws.Server({ noServer: true });
 
 // fix this hardcoded string in final release
-const webSocket = new ws.WebSocket('ws://localhost:3000?id=SERVER')
+const webSocket = new ws.WebSocket('ws://localhost:3000?id=SERVER');
+webSocket.id = 'SERVER';
 
 // create our folder for text files if it doesn't exist
 const textFileFolderName = __dirname + '/' + text_dir_name;
-if (!fs.existsSync(textFileFolderName)){
+if (!fs.existsSync(textFileFolderName)) {
     fs.mkdirSync(textFileFolderName);
 }
 
@@ -32,6 +32,7 @@ let last_values = {
     p2_name: "",
     p2_score: 0,
     p2_losers: false,
+    senderID: "",
 }
 
 wsServer.on('connection', (socket, req) => {
@@ -45,78 +46,89 @@ wsServer.on('connection', (socket, req) => {
 
         messageJson = JSON.parse(message);
 
-        const thisRound = messageJson.round;
-        const thisP1Name = messageJson.p1_name;
-        const thisP1Losers = messageJson.p1_losers;
-        const thisP1Score = messageJson.p1_score;
-        const thisP2Name = messageJson.p2_name;
-        const thisP2Losers = messageJson.p2_losers;
-        const thisP2Score = messageJson.p2_score;
-    
-        if (thisRound !== last_values.round) {
-            verboseDebug('Start updating round');
-            fs.writeFileSync(textFileFolderName + round_filename, thisRound, {flag: 'w'}, err => console.error(err));
-            verboseDebug('Round: ' + thisRound);
-            verboseDebug('Done updating');
-        }
-        if (thisP1Name !== last_values.p1_name || thisP1Losers !== last_values.p1_losers) {
-            verboseDebug('Start updating p1 name');
-            const name = thisP1Name.toUpperCase() + (thisP1Losers ? " [L]" : "");
-            fs.writeFileSync(textFileFolderName + p1_filename, name, {flag: 'w'}, err => console.error(err));
-            verboseDebug('Player 1: ' + name);
-            verboseDebug('Done updating');
-        }
-        if (thisP1Score !== last_values.p1_score) {
-            verboseDebug('Start updating p1 score');
-            fs.writeFileSync(textFileFolderName + p1_score_filename, thisP1Score, {flag: 'w'}, err => console.error(err));
-            verboseDebug('Player 1 Score: ' + thisP1Score);
-            verboseDebug('Done updating');
-        }
-        if (thisP2Name !== last_values.p2_name || thisP2Losers !== last_values.p2_losers) {
-            verboseDebug('Start updating p2 name');
-            const name = thisP2Name.toUpperCase() + (thisP2Losers ? " [L]" : "");
-            fs.writeFileSync(textFileFolderName + p2_filename, name, {flag: 'w'}, err => console.error(err));
-            verboseDebug('Player 2: ' + name);
-            verboseDebug('Done updating');
-        }
-        if (thisP2Score !== last_values.p2_score) {
-            verboseDebug('Start updating p2 score');
-            fs.writeFileSync(textFileFolderName + p2_score_filename, thisP2Score, {flag: 'w'}, err => console.error(err));
-            verboseDebug('Player 2 Score: ' + thisP2Score);
-            verboseDebug('Done updating');
-        }
-    
-        // update the last values
-        last_values = {
-            round: thisRound,
-            p1_name: thisP1Name,
-            p1_losers: thisP1Losers,
-            p1_score: thisP1Score,
-            p2_name: thisP2Name,
-            p2_score: thisP2Score,
-            p2_losers: thisP2Losers,
-        }
-
-        // deep copy / clone
-        let send_object = JSON.parse(JSON.stringify(last_values));
-        send_object.senderID = socket.id;
-    
-        // send message to each client (except itself)
-        wsServer.clients.forEach(client => {
-            verboseDebug('Client: ' + client.id)
-            if (client.id !== 'SERVER' && client.readyState === ws.OPEN) {
-                verboseDebug('Message sent.');
-                client.send(JSON.stringify(send_object));
-            } else {
-                verboseDebug('Message not sent: ' + 
-                    (client.id === 'SERVER' ? 'Is server' : 'client.readyState !== ws.OPEN'));
+        // simply return the information if the message has a 'get' property
+        if (messageJson.get) {
+            wsServer.clients.forEach(client => {
+                // only send the last_values to specific requester
+                if (client.id === socket.id) {
+                    verboseDebug('Last values sent to client ' + client.id)
+                    client.send(JSON.stringify(last_values))
+                }
+            })
+        } else {
+            const thisRound = messageJson.round;
+            const thisP1Name = messageJson.p1_name;
+            const thisP1Losers = messageJson.p1_losers;
+            const thisP1Score = messageJson.p1_score;
+            const thisP2Name = messageJson.p2_name;
+            const thisP2Losers = messageJson.p2_losers;
+            const thisP2Score = messageJson.p2_score;
+        
+            if (thisRound !== last_values.round) {
+                verboseDebug('Start updating round');
+                fs.writeFileSync(textFileFolderName + round_filename, thisRound, {flag: 'w'}, err => console.error(err));
+                verboseDebug('Round: ' + thisRound);
+                verboseDebug('Done updating');
             }
-        });
+            if (thisP1Name !== last_values.p1_name || thisP1Losers !== last_values.p1_losers) {
+                verboseDebug('Start updating p1 name');
+                const name = thisP1Name.toUpperCase() + (thisP1Losers ? " [L]" : "");
+                fs.writeFileSync(textFileFolderName + p1_filename, name, {flag: 'w'}, err => console.error(err));
+                verboseDebug('Player 1: ' + name);
+                verboseDebug('Done updating');
+            }
+            if (thisP1Score !== last_values.p1_score) {
+                verboseDebug('Start updating p1 score');
+                fs.writeFileSync(textFileFolderName + p1_score_filename, thisP1Score, {flag: 'w'}, err => console.error(err));
+                verboseDebug('Player 1 Score: ' + thisP1Score);
+                verboseDebug('Done updating');
+            }
+            if (thisP2Name !== last_values.p2_name || thisP2Losers !== last_values.p2_losers) {
+                verboseDebug('Start updating p2 name');
+                const name = thisP2Name.toUpperCase() + (thisP2Losers ? " [L]" : "");
+                fs.writeFileSync(textFileFolderName + p2_filename, name, {flag: 'w'}, err => console.error(err));
+                verboseDebug('Player 2: ' + name);
+                verboseDebug('Done updating');
+            }
+            if (thisP2Score !== last_values.p2_score) {
+                verboseDebug('Start updating p2 score');
+                fs.writeFileSync(textFileFolderName + p2_score_filename, thisP2Score, {flag: 'w'}, err => console.error(err));
+                verboseDebug('Player 2 Score: ' + thisP2Score);
+                verboseDebug('Done updating');
+            }
+        
+            // update the last values
+            last_values = {
+                round: thisRound,
+                p1_name: thisP1Name,
+                p1_losers: thisP1Losers,
+                p1_score: thisP1Score,
+                p2_name: thisP2Name,
+                p2_score: thisP2Score,
+                p2_losers: thisP2Losers,
+                senderID: socket.id,
+            }
+
+            // send message to each client (except itself)
+            wsServer.clients.forEach(client => {
+                verboseDebug('Client: ' + client.id)
+                if (client.id !== webSocket.id && client.readyState === ws.OPEN) {
+                    verboseDebug('Message sent.');
+                    client.send(JSON.stringify(last_values));
+                } else {
+                    let reasonNotSent = "";
+                    if (client.id === webSocket.id)
+                        reasonNotSent = 'Is server';
+                    else
+                        reasonNotSent = 'Client is not open';
+
+                    verboseDebug('Message not sent: ' + reasonNotSent);
+                }
+            });
+        }
     
         console.log('Done with request.\n');
     })
 })
-
-const router = express.Router();
 
 module.exports.wsServer = wsServer;
