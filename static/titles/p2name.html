@@ -6,7 +6,7 @@
     <link href="player.css" rel="stylesheet">
 </head>
 <body>
-<h1 id='p1-name'>Please wait...</h1>
+<h1 id='p2-name'>Please wait...</h1>
 <script>
 // generate a random UUID for the client
 let uuid;
@@ -27,7 +27,7 @@ wsclient.onopen = () => {
 // on message received, set correct HTML element with correct text
 wsclient.onmessage = message => {
     const messageData = JSON.parse(message.data);
-    document.getElementById('p1-name').innerHTML = messageData.p1_name + (messageData.p1_losers ? " [L]" : "");
+    document.getElementById('p2-name').innerHTML = messageData.p2_name + (messageData.p2_losers ? " [L]" : "");
 }
 </script>
 </body>
