@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>P2 Score</title>
+    <link href="score.css" rel="stylesheet">
+</head>
+<body>
+<h1 id='p2-score'>Please wait...</h1>
+<script>
+// generate a random UUID for the client
+let uuid;
+if (typeof self.crypto.randomUUID === 'function') {
+    uuid = self.crypto.randomUUID();
+} else {
+    uuid = Math.floor(Math.random(1) * 1_000_000_000_000_000).toString();
+}
+
+// update websocket url in prod
+const wsclient = new WebSocket('ws://localhost:3000?id=' + uuid);
+
+// get all information on page load
+wsclient.onopen = () => {
+    wsclient.send(JSON.stringify({ get: true }));
+}
+
+// on message received, set correct HTML element with correct text
+wsclient.onmessage = message => {
+    const messageData = JSON.parse(message.data);
+    document.getElementById('p2-score').innerHTML = messageData.p2_score;
+}
+</script>
+</body>
+</html>
