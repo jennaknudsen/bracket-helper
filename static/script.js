@@ -2,8 +2,9 @@
 let uuid = self.crypto.randomUUID();
 document.getElementById('client-id').innerHTML = uuid;
 
-// update websocket url in prod
-const wsclient = new WebSocket('ws://localhost:3000?id=' + uuid);
+const serverIP = '13.59.226.222:80';
+const wsclient = new WebSocket('ws://' + serverIP + '?id=' + uuid);
+
 let lastChangeTime = 0;
 const timeToUpdate = 2000;
 

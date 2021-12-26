@@ -6,7 +6,7 @@ const websocket = require('./websocket');
 
 // make an express app
 const app = express();
-const port = 3000;
+const port = 80;
 
 // use the static directory to serve static html files
 app.use(express.static('static'));

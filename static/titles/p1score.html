@@ -16,8 +16,8 @@ if (typeof self.crypto.randomUUID === 'function') {
     uuid = Math.floor(Math.random(1) * 1_000_000_000_000_000).toString();
 }
 
-// update websocket url in prod
-const wsclient = new WebSocket('ws://localhost:3000?id=' + uuid);
+const serverIP = '13.59.226.222:80';
+const wsclient = new WebSocket('ws://' + serverIP + '?id=' + uuid);
 
 // get all information on page load
 wsclient.onopen = () => {
