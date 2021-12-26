@@ -1,3 +1,5 @@
+// update websocket url in prod
+const wsclient = new WebSocket('ws://localhost:3000');
 let lastChangeTime = 0;
 const timeToUpdate = 2000;
 
@@ -29,17 +31,20 @@ function textChanged() {
 
             console.log(post_object)
 
-            fetch('http://localhost:3000/api', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(post_object)
-            }).then(data => data.json()).then((data) => {
-                console.log('All values updated on server')
-                document.getElementById('results-pre').innerHTML = 
-                    JSON.stringify(data, null, '    ');
-            });
+            // fetch('http://localhost:3000/api', {
+            //     method: 'PUT',
+            //     headers: {
+            //         'Content-Type': 'application/json'
+            //     },
+            //     body: JSON.stringify(post_object)
+            // }).then(data => data.json()).then((data) => {
+            //     console.log('All values updated on server')
+            //     document.getElementById('results-pre').innerHTML = 
+            //         JSON.stringify(data, null, '    ');
+            // });
+
+            // send message to server using websockets
+            wsclient.send(JSON.stringify(post_object));
         }
     }, timeToUpdate);
 }
@@ -94,8 +99,7 @@ function resetAll() {
     textChanged();
 }
 
-// test code for websockets
-const wsclient = new WebSocket('ws://localhost:3000');
+// this handles return messages from the server
 wsclient.onmessage = message => {
     console.log('Got message from server via WebSocket');
     console.log(JSON.parse(message.data));
