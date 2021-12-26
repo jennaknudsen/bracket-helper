@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>P1 Title</title>
+    <link href="player.css" rel="stylesheet">
+</head>
+<body>
+<h1 id='p1-name'>Please wait...</h1>
+<script>
+// generate a random UUID for the client
+let uuid = self.crypto.randomUUID();;
+
+// update websocket url in prod
+const wsclient = new WebSocket('ws://localhost:3000?id=' + uuid);
+
+// get all information on page load
+wsclient.onopen = () => {
+    wsclient.send(JSON.stringify({ get: true }));
+}
+
+wsclient.onmessage = message => {
+    const messageData = JSON.parse(message.data);
+    document.getElementById('p1-name').innerHTML = messageData.p1_name;
+}
+</script>
+</body>
+</html>
