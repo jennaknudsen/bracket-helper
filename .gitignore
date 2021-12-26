@@ -77,3 +77,4 @@ fabric.properties
 .idea/
 node_modules/
 text_files/
+.env

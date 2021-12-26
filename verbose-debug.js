@@ -1,4 +1,4 @@
-const verboseDebug = process.env.VERBOSE_DEBUG ? Boolean(process.env.VERBOSE_DEBUG) : true;
+const verboseDebug = process.env.VERBOSE_DEBUG ? process.env.VERBOSE_DEBUG.toLowerCase() === 'true' : false;
 
 function debug(message) {
     if (verboseDebug) {
