@@ -1,36 +1,86 @@
-.input-label {
-    text-align: right;
-    width: 100px;
-    display: inline-block;
-    margin-right: 5px;
+
+@media (min-width: 0em) and (max-width: 39.9em) {
+    .input-label {
+        display: block;
+    }
+
+    label {
+        /* text-align: right; */
+        /* width: 100px; */
+        font-size: larger;
+        /* margin-right: 5px; */
+        margin-bottom: 10px
+    }
+
+    div {
+        padding: 5px;
+    }
+
+    input {
+        font-size: larger;
+    }
+
+    body {
+        background-color: #fbfbfb;
+        font-family: 'Helvetica', sans-serif;
+    }
+
+    .space-span {
+        padding-left: 20px;
+    }
+
+    pre {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: smaller;
+    }   
+
+    #centered-buttons {
+        margin-top: 10px;
+        margin-left: 30px;
+    }
 }
 
-div {
-    padding: 5px;
-}
+@media (min-width: 40em) {
+    .input-label {
+        text-align: right;
+        width: 100px;
+        display: inline-block;
+        margin-right: 5px;
+    }
 
-body {
-    background-color: #cfcfcf;
-    font-family: 'Helvetica', sans-serif;
-}
+    div {
+        padding: 5px;
+    }
 
-.centered-div {
-    padding-left: 30px;
-    padding-right: 30px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    height: 80%;
-    box-shadow: 0px 0px 10px 10px #888888;
-    background-color: #fbfbfb;
-}
+    body {
+        background-color: #cfcfcf;
+        font-family: 'Helvetica', sans-serif;
+    }
 
-.space-span {
-    padding-left: 40px;
-}
+    .centered-div {
+        padding-left: 30px;
+        padding-right: 30px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        height: 80%;
+        box-shadow: 0px 0px 10px 10px #888888;
+        background-color: #fbfbfb;
+    }
 
-pre {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
+    .space-span {
+        padding-left: 40px;
+    }
+
+    pre {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 13px;
+    }   
+
+
+    #centered-buttons {
+        margin-top: 30px; 
+        margin-left: 150px;
+    }
 }
