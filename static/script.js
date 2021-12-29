@@ -97,6 +97,28 @@ function resetAll() {
     textChanged();
 }
 
+function swap() {
+    let p1Name = document.getElementById('player-1');
+    let p2Name = document.getElementById('player-2');
+    let p1Score = document.getElementById('player-1-score');
+    let p2Score = document.getElementById('player-2-score');
+    let p1Losers = document.getElementById('player-1-losers');
+    let p2Losers = document.getElementById('player-2-losers');
+
+    let tmpName = p1Name.value;
+    let tmpScore = p1Score.value;
+    let tmpLosers = p1Losers.checked;
+
+    p1Name.value = p2Name.value;
+    p1Score.value = p2Score.value;
+    p1Losers.checked = p2Losers.checked;
+    p2Name.value = tmpName;
+    p2Score.value = tmpScore;
+    p2Losers.checked = tmpLosers;
+
+    textChanged();
+}
+
 // this handles return messages from the server
 wsclient.onmessage = message => {
     const messageData = JSON.parse(message.data);
