@@ -1,5 +1,4 @@
-
-@media (min-width: 0em) and (max-width: 39.9em) {
+@media (max-width: 1199px) {
     .input-label {
         display: block;
     }
@@ -20,9 +19,24 @@
         font-size: larger;
     }
 
-    body {
+    html, body {
+        width: 100%;
+        overflow-x: hidden;
         background-color: #fbfbfb;
         font-family: 'Helvetica', sans-serif;
+    }
+
+    .centered-div {
+        width: 600px;
+        margin-left: auto;
+        padding-right: auto;
+        position: absolute;
+        top: 0%;
+        left: 50%;
+        transform: translate(-50%, 0%);
+        height: 80%;
+        /* box-shadow: 0px 0px 10px 10px #888888; */
+        /* background-color: #fbfbfb; */
     }
 
     .space-span {
@@ -40,7 +54,7 @@
     }
 }
 
-@media (min-width: 40em) {
+@media (min-width: 1200px) {
     .input-label {
         text-align: right;
         width: 100px;
